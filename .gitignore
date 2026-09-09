@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environments
+.env
+.venv/
+venv/
+vlm_env/
+
+# Model/cache
+.cache/
+hf_cache/
+huggingface/
+*.safetensors
+*.bin
+*.pt
+*.pth
+
+# Raw / processed datasets
+SPED/
+data/
+dataset/
+datasets/
+frames/
+videos/
+*.mp4
+*.avi
+*.mov
+
+# Intermediate grounding outputs
+bt_features/
+hand_features/
+event_candidates/
+candidates/
+refined_boundaries/
+final_labels/
+start_phase/
+generated_bts/
+
+# Pixtral outputs
+pixtral_transition_crops/
+pixtral_only_labels/
+*_manifest.json
+
+# Evaluation outputs
+*.csv
+*.log
+
+# HPC / Slurm
+slurm-*.out
+*.job
+*.err
+
+# Editors / OS
+.DS_Store
+.vscode/
+.idea/
