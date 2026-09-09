@@ -1,0 +1,8 @@
+torch==2.13.0
+transformers==5.14.1
+numpy==2.3.5
+pandas==3.0.5
+mediapipe==1.0.1
+opencv-python
+Pillow
+accelerate
