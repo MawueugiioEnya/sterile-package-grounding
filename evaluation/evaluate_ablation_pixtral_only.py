@@ -438,30 +438,52 @@ def tiou(a, b):
 
 
 def summary(rows, metric):
+    """
+    Boundary error summary with explicit detection coverage.
+
+    The denominator is the number of sequences with valid manual GT for the
+    boundary. MAE/median/tolerance rates are calculated only where Pixtral
+    produced a boundary, while coverage is reported separately.
+    """
+
+    gt_key = metric.replace("_error", "_gt")
+
+    eligible = [
+        row
+        for row in rows
+        if row.get(gt_key) is not None
+    ]
+
     vals = [
         int(row[metric])
-        for row in rows
-        if row[metric] is not None
+        for row in eligible
+        if row.get(metric) is not None
     ]
 
     print(f"\n{metric}")
-    print(f"  n      : {len(vals)}")
+    print(f"  GT eligible : {len(eligible)}")
+    print(
+        f"  detected    : {len(vals)}/{len(eligible)} "
+        f"({100 * len(vals) / len(eligible):.1f}%)"
+        if eligible
+        else "  detected    : 0/0"
+    )
 
     if not vals:
         return
 
     print(
-        f"  MAE    : "
+        f"  MAE         : "
         f"{statistics.mean(vals):.2f} frames"
     )
 
     print(
-        f"  median : "
+        f"  median      : "
         f"{statistics.median(vals):.2f} frames"
     )
 
-    print(f"  min    : {min(vals)}")
-    print(f"  max    : {max(vals)}")
+    print(f"  min         : {min(vals)}")
+    print(f"  max         : {max(vals)}")
 
     for tol in (2, 5, 10):
         good = sum(
@@ -470,9 +492,9 @@ def summary(rows, metric):
         )
 
         print(
-            f"  <= {tol:2d} frames: "
+            f"  <= {tol:2d} frames : "
             f"{good}/{len(vals)} "
-            f"({100 * good / len(vals):.1f}%)"
+            f"({100 * good / len(vals):.1f}% of detected)"
         )
 
 
@@ -505,29 +527,33 @@ def main():
 
     args = parser.parse_args()
 
-    cras_dir = Path(
-        args.cras_dir
-    )
-
-    labels_dir = Path(
-        args.labels_dir
-    )
+    cras_dir = Path(args.cras_dir)
+    labels_dir = Path(args.labels_dir)
 
     boundary_rows = []
     tiou_rows = []
 
     missing_files = []
     missing_boundaries = []
+    invalid_gt_for_tiou = []
 
-    for cp in sorted(
-        cras_dir.rglob(
-            "*_annotations.json"
-        )
-    ):
+    annotation_files = sorted(
+        cras_dir.rglob("*_annotations.json")
+    )
+
+    for cp in annotation_files:
         seq = cp.stem.replace(
             "_annotations",
             "",
         )
+
+        gt = json.loads(
+            cp.read_text()
+        )
+
+        grasp_gt = gt_grasp_start(gt)
+        peel_gt = gt_pull_start(gt)
+        drop_gt = gt_release_start(gt)
 
         matches = list(
             labels_dir.rglob(
@@ -552,10 +578,6 @@ def main():
             else matches[0]
         )
 
-        gt = json.loads(
-            cp.read_text()
-        )
-
         labels = json.loads(
             lp.read_text()
         )
@@ -565,33 +587,37 @@ def main():
                 f"{lp}: expected a JSON list of framewise labels"
             )
 
+        if not labels:
+            raise RuntimeError(
+                f"{lp}: empty framewise label list"
+            )
+
         pred = pixtral_boundaries(
             labels,
             min_run=args.min_run,
         )
 
-        grasp_gt = gt_grasp_start(gt)
-        peel_gt = gt_pull_start(gt)
-        drop_gt = gt_release_start(gt)
-
         boundary_rows.append(
             {
                 "sequence": seq,
-                "grasp_error":
-                    abs_err(
-                        pred["grasp"],
-                        grasp_gt,
-                    ),
-                "peel_error":
-                    abs_err(
-                        pred["peel"],
-                        peel_gt,
-                    ),
-                "drop_error":
-                    abs_err(
-                        pred["drop"],
-                        drop_gt,
-                    ),
+                "grasp_gt": grasp_gt,
+                "peel_gt": peel_gt,
+                "drop_gt": drop_gt,
+                "grasp_pred": pred["grasp"],
+                "peel_pred": pred["peel"],
+                "drop_pred": pred["drop"],
+                "grasp_error": abs_err(
+                    pred["grasp"],
+                    grasp_gt,
+                ),
+                "peel_error": abs_err(
+                    pred["peel"],
+                    peel_gt,
+                ),
+                "drop_error": abs_err(
+                    pred["drop"],
+                    drop_gt,
+                ),
             }
         )
 
@@ -613,17 +639,20 @@ def main():
                 )
             )
 
+        # --------------------------------------------------------
+        # Fixed tIoU cohort:
+        # determined ONLY by manual GT validity/order, not by
+        # whether Pixtral detected a phase.
+        # --------------------------------------------------------
         if any(
             x is None
             for x in (
                 grasp_gt,
                 peel_gt,
                 drop_gt,
-                pred["grasp"],
-                pred["peel"],
-                pred["drop"],
             )
         ):
+            invalid_gt_for_tiou.append(seq)
             continue
 
         if not (
@@ -633,15 +662,7 @@ def main():
             <= drop_gt
             <= pred["last"]
         ):
-            continue
-
-        if not (
-            pred["first"]
-            <= pred["grasp"]
-            <= pred["peel"]
-            <= pred["drop"]
-            <= pred["last"]
-        ):
+            invalid_gt_for_tiou.append(seq)
             continue
 
         gt_intervals = {
@@ -652,7 +673,6 @@ def main():
                     grasp_gt - 1,
                 ),
             ),
-
             "peel_apart": (
                 peel_gt,
                 max(
@@ -660,59 +680,81 @@ def main():
                     drop_gt - 1,
                 ),
             ),
-
             "drop_contents": (
                 drop_gt,
                 pred["last"],
             ),
         }
 
-        pred_intervals = {
-            "locate_flaps": (
+        # A missing predicted transition is a grounding failure,
+        # not grounds for removing the sequence from the tIoU cohort.
+        locate_score = 0.0
+        peel_score = 0.0
+        drop_score = 0.0
+
+        if pred["grasp"] is not None:
+            pred_locate = (
                 pred["first"],
                 max(
                     pred["first"],
                     pred["grasp"] - 1,
                 ),
-            ),
+            )
+            locate_score = tiou(
+                gt_intervals["locate_flaps"],
+                pred_locate,
+            )
 
-            "peel_apart": (
+        if (
+            pred["peel"] is not None
+            and pred["drop"] is not None
+        ):
+            pred_peel = (
                 pred["peel"],
                 max(
                     pred["peel"],
                     pred["drop"] - 1,
                 ),
-            ),
+            )
+            peel_score = tiou(
+                gt_intervals["peel_apart"],
+                pred_peel,
+            )
 
-            "drop_contents": (
+        if pred["drop"] is not None:
+            pred_drop = (
                 pred["drop"],
                 pred["last"],
-            ),
-        }
+            )
+            drop_score = tiou(
+                gt_intervals["drop_contents"],
+                pred_drop,
+            )
 
         tiou_rows.append(
             {
                 "sequence": seq,
-
-                **{
-                    phase: tiou(
-                        gt_intervals[phase],
-                        pred_intervals[phase],
-                    )
-                    for phase in PHASES
-                },
+                "locate_flaps": locate_score,
+                "peel_apart": peel_score,
+                "drop_contents": drop_score,
             }
         )
 
     print("=" * 72)
-    print(
-        "ABLATION: PIXTRAL ONLY"
-    )
+    print("ABLATION: PIXTRAL ONLY")
     print("=" * 72)
 
     print(
-        "Boundary-evaluation sequences:",
+        "Manual annotation files:",
+        len(annotation_files),
+    )
+    print(
+        "Pixtral label files evaluated:",
         len(boundary_rows),
+    )
+    print(
+        "Missing Pixtral label files:",
+        len(missing_files),
     )
 
     summary(
@@ -736,7 +778,7 @@ def main():
     print("-" * 72)
 
     print(
-        "Evaluated sequences:",
+        "GT-valid tIoU sequences with labels:",
         len(tiou_rows),
     )
 
@@ -754,29 +796,38 @@ def main():
             for value in vals
         )
 
+        zeros = sum(
+            value == 0.0
+            for value in vals
+        )
+
         print(f"\n{phase}")
 
         print(
-            f"  mean tIoU   : "
+            f"  mean tIoU    : "
             f"{statistics.mean(vals):.3f}"
         )
 
         print(
-            f"  median tIoU : "
+            f"  median tIoU  : "
             f"{statistics.median(vals):.3f}"
         )
 
         print(
-            f"  tIoU >= 0.50: "
+            f"  tIoU >= 0.50 : "
             f"{good}/{len(vals)} "
             f"({100 * good / len(vals):.1f}%)"
         )
 
+        print(
+            f"  zero tIoU    : "
+            f"{zeros}/{len(vals)} "
+            f"({100 * zeros / len(vals):.1f}%)"
+        )
+
     print()
     print("-" * 72)
-    print(
-        "PER-SEQUENCE BOUNDARY ERRORS"
-    )
+    print("PER-SEQUENCE BOUNDARY ERRORS")
     print("-" * 72)
 
     for row in boundary_rows:
@@ -789,9 +840,7 @@ def main():
 
     if missing_files:
         print()
-        print(
-            "Missing Pixtral label files:"
-        )
+        print("Missing Pixtral label files:")
 
         for seq in missing_files:
             print(
@@ -800,14 +849,23 @@ def main():
 
     if missing_boundaries:
         print()
-        print(
-            "Pixtral transitions not detected:"
-        )
+        print("Pixtral transitions not detected:")
 
         for seq, names in missing_boundaries:
             print(
                 f"  {seq}: "
                 + ", ".join(names)
+            )
+
+    if invalid_gt_for_tiou:
+        print()
+        print(
+            "Excluded from tIoU due to incomplete/invalid manual GT:"
+        )
+
+        for seq in invalid_gt_for_tiou:
+            print(
+                f"  {seq}"
             )
 
 
