@@ -1,0 +1,81 @@
+{
+  "methods": [
+    "geometry_motion",
+    "pixtral_only",
+    "hybrid"
+  ],
+  "required_nodes": {
+    "grasp": "EnsureFlapsSecured",
+    "open": "EnsurePackageOpen",
+    "release": "EnsureContentsReleased"
+  },
+  "summary": {
+    "geometry_motion": {
+      "n_sequences": 24,
+      "grasp_subtree": {
+        "count": 24,
+        "percent": 100.0
+      },
+      "open_subtree": {
+        "count": 24,
+        "percent": 100.0
+      },
+      "release_subtree": {
+        "count": 24,
+        "percent": 100.0
+      },
+      "complete_bt": {
+        "count": 24,
+        "percent": 100.0
+      },
+      "incomplete_sequences": []
+    },
+    "pixtral_only": {
+      "n_sequences": 24,
+      "grasp_subtree": {
+        "count": 24,
+        "percent": 100.0
+      },
+      "open_subtree": {
+        "count": 19,
+        "percent": 79.16666666666667
+      },
+      "release_subtree": {
+        "count": 18,
+        "percent": 75.0
+      },
+      "complete_bt": {
+        "count": 18,
+        "percent": 75.0
+      },
+      "incomplete_sequences": [
+        "P01_SEQ_0002",
+        "P02_SEQ_0020",
+        "P02_SEQ_0023",
+        "P02_SEQ_0025",
+        "P02_SEQ_0026",
+        "P03_SEQ_0015"
+      ]
+    },
+    "hybrid": {
+      "n_sequences": 24,
+      "grasp_subtree": {
+        "count": 24,
+        "percent": 100.0
+      },
+      "open_subtree": {
+        "count": 24,
+        "percent": 100.0
+      },
+      "release_subtree": {
+        "count": 24,
+        "percent": 100.0
+      },
+      "complete_bt": {
+        "count": 24,
+        "percent": 100.0
+      },
+      "incomplete_sequences": []
+    }
+  }
+}
