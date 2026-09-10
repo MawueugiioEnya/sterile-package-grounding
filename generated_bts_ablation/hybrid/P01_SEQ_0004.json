@@ -1,0 +1,211 @@
+{
+  "type": "Sequence",
+  "name": "OpenSterilePackage",
+  "children": [
+    {
+      "type": "Condition",
+      "name": "package_held"
+    },
+    {
+      "type": "Selector",
+      "name": "EnsureFlapsSecured",
+      "children": [
+        {
+          "type": "Condition",
+          "name": "both_flaps_secured"
+        },
+        {
+          "type": "Retry",
+          "name": "RetryFlapAcquisition",
+          "max_attempts": 3,
+          "child": {
+            "type": "Sequence",
+            "name": "AcquireFlaps",
+            "children": [
+              {
+                "type": "Selector",
+                "name": "EnsurePeelRegion",
+                "children": [
+                  {
+                    "type": "Condition",
+                    "name": "peel_region_found"
+                  },
+                  {
+                    "type": "Action",
+                    "name": "DetectPeelRegion"
+                  }
+                ]
+              },
+              {
+                "type": "Action",
+                "name": "ApproachFlapPair"
+              },
+              {
+                "type": "Condition",
+                "name": "flap_region_reached"
+              },
+              {
+                "type": "Action",
+                "name": "EngageFlapPair"
+              },
+              {
+                "type": "Condition",
+                "name": "flap_pair_engaged"
+              },
+              {
+                "type": "Action",
+                "name": "PositionGripperAroundFlaps"
+              },
+              {
+                "type": "Action",
+                "name": "VerifyFlapsBetweenFingers"
+              },
+              {
+                "type": "Condition",
+                "name": "flaps_between_fingers"
+              },
+              {
+                "type": "Action",
+                "name": "SeparateLayers"
+              },
+              {
+                "type": "Action",
+                "name": "VerifyInitialSeparation"
+              },
+              {
+                "type": "Condition",
+                "name": "initial_separation_observed"
+              },
+              {
+                "type": "Condition",
+                "name": "both_flaps_secured"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "Selector",
+      "name": "EnsurePackageOpen",
+      "children": [
+        {
+          "type": "Condition",
+          "name": "package_open"
+        },
+        {
+          "type": "Sequence",
+          "name": "OpenPackage",
+          "children": [
+            {
+              "type": "Selector",
+              "name": "EnsureFlapsStillSecured",
+              "children": [
+                {
+                  "type": "Condition",
+                  "name": "both_flaps_secured"
+                },
+                {
+                  "type": "Sequence",
+                  "name": "ReacquireFlaps",
+                  "children": [
+                    {
+                      "type": "Selector",
+                      "name": "EnsurePeelRegion",
+                      "children": [
+                        {
+                          "type": "Condition",
+                          "name": "peel_region_found"
+                        },
+                        {
+                          "type": "Action",
+                          "name": "DetectPeelRegion"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "Action",
+                      "name": "ApproachFlapPair"
+                    },
+                    {
+                      "type": "Condition",
+                      "name": "flap_region_reached"
+                    },
+                    {
+                      "type": "Action",
+                      "name": "EngageFlapPair"
+                    },
+                    {
+                      "type": "Condition",
+                      "name": "flap_pair_engaged"
+                    },
+                    {
+                      "type": "Action",
+                      "name": "PositionGripperAroundFlaps"
+                    },
+                    {
+                      "type": "Action",
+                      "name": "VerifyFlapsBetweenFingers"
+                    },
+                    {
+                      "type": "Condition",
+                      "name": "flaps_between_fingers"
+                    },
+                    {
+                      "type": "Action",
+                      "name": "SeparateLayers"
+                    },
+                    {
+                      "type": "Action",
+                      "name": "VerifyInitialSeparation"
+                    },
+                    {
+                      "type": "Condition",
+                      "name": "initial_separation_observed"
+                    },
+                    {
+                      "type": "Condition",
+                      "name": "both_flaps_secured"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Action",
+              "name": "PullApart"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Selector",
+      "name": "EnsureContentsReleased",
+      "children": [
+        {
+          "type": "Condition",
+          "name": "contents_released"
+        },
+        {
+          "type": "Action",
+          "name": "ReleaseContents"
+        }
+      ]
+    },
+    {
+      "type": "Selector",
+      "name": "EnsureSafeFinish",
+      "children": [
+        {
+          "type": "Condition",
+          "name": "robot_pose_safe"
+        },
+        {
+          "type": "Action",
+          "name": "ReturnSafe"
+        }
+      ]
+    }
+  ]
+}

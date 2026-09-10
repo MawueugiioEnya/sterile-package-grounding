@@ -1,0 +1,40 @@
+{
+  "compiler_version": "0.1",
+  "sequence": "P01_SEQ_0007",
+  "source_labels_file": "/scratch/users/k24103423/vlm/bt_inputs_ablation/pixtral_only/P01_SEQ_0007.json",
+  "method": "pixtral_only",
+  "frame_range": null,
+  "pickup_observed": false,
+  "review_required": false,
+  "demonstration_trace": [
+    {
+      "skill": "grasp_flaps",
+      "start_frame": 23,
+      "end_frame": 49,
+      "duration_frames": 27,
+      "source": "pixtral_only"
+    },
+    {
+      "skill": "peel_apart",
+      "start_frame": 50,
+      "end_frame": 68,
+      "duration_frames": 19,
+      "source": "pixtral_only"
+    },
+    {
+      "skill": "drop_contents",
+      "start_frame": 69,
+      "end_frame": 70,
+      "duration_frames": 2,
+      "source": "pixtral_only"
+    }
+  ],
+  "semantic_events": [],
+  "feature_burst_count": null,
+  "inter_burst_decisions": [],
+  "generated_tree": "generated_bts_ablation/pixtral_only/P01_SEQ_0007.json",
+  "compiler_notes": [
+    "Feature bursts are not compiled as separate robot actions unless semantic resolution indicates genuine release/reacquisition.",
+    "ReturnSafe is an execution invariant added by the robot domain, not a demonstrated human skill."
+  ]
+}

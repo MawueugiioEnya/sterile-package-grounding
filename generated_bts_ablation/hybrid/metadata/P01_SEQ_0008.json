@@ -1,0 +1,40 @@
+{
+  "compiler_version": "0.1",
+  "sequence": "P01_SEQ_0008",
+  "source_labels_file": "/scratch/users/k24103423/vlm/bt_inputs_ablation/hybrid/P01_SEQ_0008.json",
+  "method": "hybrid",
+  "frame_range": null,
+  "pickup_observed": false,
+  "review_required": false,
+  "demonstration_trace": [
+    {
+      "skill": "grasp_flaps",
+      "start_frame": 47,
+      "end_frame": 58,
+      "duration_frames": 12,
+      "source": "hybrid"
+    },
+    {
+      "skill": "peel_apart",
+      "start_frame": 59,
+      "end_frame": 104,
+      "duration_frames": 46,
+      "source": "hybrid"
+    },
+    {
+      "skill": "drop_contents",
+      "start_frame": 105,
+      "end_frame": 124,
+      "duration_frames": 20,
+      "source": "hybrid"
+    }
+  ],
+  "semantic_events": [],
+  "feature_burst_count": null,
+  "inter_burst_decisions": [],
+  "generated_tree": "generated_bts_ablation/hybrid/P01_SEQ_0008.json",
+  "compiler_notes": [
+    "Feature bursts are not compiled as separate robot actions unless semantic resolution indicates genuine release/reacquisition.",
+    "ReturnSafe is an execution invariant added by the robot domain, not a demonstrated human skill."
+  ]
+}

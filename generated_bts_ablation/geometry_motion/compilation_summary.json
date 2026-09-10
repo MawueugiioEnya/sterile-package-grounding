@@ -1,0 +1,299 @@
+{
+  "compiler_version": "0.1",
+  "input_directory": "/scratch/users/k24103423/vlm/bt_inputs_ablation/geometry_motion",
+  "output_directory": "generated_bts_ablation/geometry_motion",
+  "statistics": {
+    "compiled": 24,
+    "pickup_not_observed": 24
+  },
+  "sequences": [
+    {
+      "sequence": "P01_SEQ_0001",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P01_SEQ_0002",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P01_SEQ_0003",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P01_SEQ_0004",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P01_SEQ_0005",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P01_SEQ_0006",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P01_SEQ_0007",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P01_SEQ_0008",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P02_SEQ_0009",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P02_SEQ_0011",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P02_SEQ_0012",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P02_SEQ_0013",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P02_SEQ_0020",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P02_SEQ_0021",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P02_SEQ_0022",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P02_SEQ_0023",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P02_SEQ_0024",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P02_SEQ_0025",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P02_SEQ_0026",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P03_SEQ_0015",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P05_SEQ_0035",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P07_SEQ_0069",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P07_SEQ_0070",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    },
+    {
+      "sequence": "P07_SEQ_0071",
+      "pickup_observed": false,
+      "review_required": false,
+      "skills": [
+        "grasp_flaps",
+        "peel_apart",
+        "drop_contents"
+      ],
+      "feature_burst_count": null,
+      "inter_burst_decisions": []
+    }
+  ]
+}
